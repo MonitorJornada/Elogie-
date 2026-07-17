@@ -1,57 +1,26 @@
-export type UserRole = 'admin' | 'member'
+import js from "@eslint/js";
+import globals from "globals";
+import reactHooks from "eslint-plugin-react-hooks";
+import reactRefresh from "eslint-plugin-react-refresh";
+import tseslint from "typescript-eslint";
 
-export type Profile = {
-  id: string
-  name: string
-  email: string
-  avatar_url: string | null
-  role: UserRole
-  department: string | null
-  company_id: string | null
-  created_at: string
-}
-
-export type ReactionSummary = {
-  emoji: string
-  count: number
-  reactedByMe: boolean
-}
-
-export type FeedbackItem = {
-  id: string
-  fromUserId: string
-  toUserId: string
-  fromName: string
-  toName: string
-  message: string
-  isAnonymous: boolean
-  createdAt: string
-  reactions: ReactionSummary[]
-}
-
-export type CelebrationType = 'birthday' | 'admission' | 'achievement' | 'baby' | 'wedding' | 'custom'
-
-export type CelebrationItem = {
-  id: string
-  userId: string
-  createdBy: string
-  userName: string
-  type: CelebrationType
-  title: string
-  description: string
-  celebrationDate: string
-  isToday: boolean
-  reactions: ReactionSummary[]
-}
-
-export type GratitudeItem = {
-  id: string
-  userId: string
-  message: string
-  userName: string
-  isAnonymous: boolean
-  color: string
-  likes: number
-  likedByMe: boolean
-  createdAt: string
-}
+export default tseslint.config(
+  { ignores: ["dist"] },
+  {
+    extends: [js.configs.recommended, ...tseslint.configs.recommended],
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+    },
+    plugins: {
+      "react-hooks": reactHooks,
+      "react-refresh": reactRefresh,
+    },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+);
